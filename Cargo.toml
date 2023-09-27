@@ -1,0 +1,19 @@
+[package]
+name = "imge2felts"
+version = "0.1.0"
+edition = "2021"
+authors = ["Philippe ROSTAN-critical.devs.fr"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/PhilippeR26/starknet-merkle"
+description = """
+Example of use of Starknet-merkle-tree™
+"""
+keywords = ["image", "starknet", "felt", "array"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+starknet-ff = "0.3"
+fs = "0.0.5"
+serde = { version="1.0.188",features=["derive"]}
