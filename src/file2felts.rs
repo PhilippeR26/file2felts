@@ -1,10 +1,8 @@
 // use starknet_ff::FieldElement;
 use crate::bin_hex;
-use crate::constants;
 
-pub fn encode(bin: &Vec<u8>, bits_output: Option<u16>) -> Vec<String> {
-    let size_out = bits_output.unwrap_or(constants::DEFAULT_OUTPUT_SIZE) as usize;
-    assert!(size_out >= 8, "size_output: 8 bits mini.");
+pub fn encode(bin: &Vec<u8>, bits_output: u16) -> Vec<String> {
+    assert!(bits_output >= 8, "size_output: 8 bits mini.");
     // transform to a vect of binaries
     let mut binary: Vec<bool> = Vec::new();
     let iter_bin = bin.iter();
@@ -26,9 +24,9 @@ pub fn encode(bin: &Vec<u8>, bits_output: Option<u16>) -> Vec<String> {
 
     // transform to an array of hex strings
     let mut result: Vec<String> = Vec::new();
-    for i in (0..(binary.len())).step_by(size_out) {
+    for i in (0..(binary.len())).step_by(bits_output.into()) {
         let mut bin = String::new();
-        for j in 0..size_out {
+        for j in 0..(bits_output as usize) {
             let char = if i + j >= binary.len() {
                 '0'
             } else {
