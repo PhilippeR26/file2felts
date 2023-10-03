@@ -30,11 +30,11 @@ file2felts encode --source ./king.gif --dest ./king.json
 > By default, this value is set to 251 (a felt is coded on 251 bits).  
 > But if you want to encode for example on u128, you have to add the option `--bits-len 128`. 
 
-Then you can store the content of the json file in a Starknet smart-contract. See an example [here TBD]().
+Then you can store the content of the json file in a Starknet smart-contract. See an example [here](typescriptDecode/src/1.declareDeployContract.ts).
 
 ## Decode
 
-An example of recovery of the file from Starknet is [here TBD]().  
+An example of recovery of the file from Starknet is [here](typescriptDecode/src/2.CallInvokeContract.ts).  
 Once the json of the data recovered , you can decode it to recover the original binary file.
 
 ```bash
