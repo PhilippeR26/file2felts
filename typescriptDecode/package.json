@@ -1,0 +1,19 @@
+{
+  "name": "decode-felts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "starknet": "^5.19.5"
+  }
+}
