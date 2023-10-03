@@ -3,7 +3,7 @@ use crate::bin_hex;
 
 pub fn encode(bin: &Vec<u8>, bits_output: u16) -> Vec<String> {
     assert!(bits_output >= 8, "size_output: 8 bits mini.");
-    // transform to a vect of binaries
+    // transform vect of u8 to a vect of binaries
     let mut binary: Vec<bool> = Vec::new();
     let iter_bin = bin.iter();
 

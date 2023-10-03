@@ -1,3 +1,3 @@
 
-pub const DEFAULT_OUTPUT_SIZE: u16 = 252;
+pub const DEFAULT_OUTPUT_SIZE: u16 = 251;
 
