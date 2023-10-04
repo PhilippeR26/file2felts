@@ -2,8 +2,10 @@
 // launch with npx ts-node src/scripts/11.CallInvokeContract.ts
 // Coded with Starknet.js v5.16.0
 
-import { Provider, RpcProvider, SequencerProvider, Contract, Account, json, BigNumberish,num, encode, constants } from "starknet";
+import { Provider, RpcProvider, SequencerProvider, Contract, Account, json, BigNumberish, num, encode, constants } from "starknet";
 import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "./private/A1priv";
+import { account4MainnetAddress, account4MainnetPrivateKey } from "./private/mainPriv";
+
 import fs from "fs";
 
 
@@ -25,15 +27,34 @@ interface BinaryJson {
 }
 
 async function main() {
-    //const provider = new SequencerProvider({ baseUrl: "http://127.0.0.1:5050" });
-    const provider = new SequencerProvider({ network: constants.NetworkName.SN_GOERLI });
-
-
-    // const privateKey0 = "0xe3e70682c2094cac629f6fbed82c07cd";
-    // const account0Address = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
-    const privateKey0 = account2TestnetPrivateKey;
-    const account0Address = account2TestnetAddress;
-    const account0 = new Account(provider, account0Address, privateKey0,"1");
+    const network: string = "devnet" // or "testnet" or "mainnet".
+    let provider: Provider | SequencerProvider | RpcProvider;
+    let privateKey0: BigNumberish;
+    let account0Address: BigNumberish;
+    let account0: Account;
+    switch (network) {
+        case "devnet":
+            provider = new SequencerProvider({ baseUrl: "http://127.0.0.1:5050" });
+            privateKey0 = "0xe3e70682c2094cac629f6fbed82c07cd";
+            account0Address = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
+            account0 = new Account(provider, account0Address, privateKey0);
+            break;
+        case "testnet":
+            provider = new RpcProvider({ nodeUrl: junoNMtestnet });
+            privateKey0 = account2TestnetPrivateKey;
+            account0Address = account2TestnetAddress;
+            account0 = new Account(provider, account0Address, privateKey0, "1");
+            break;
+        case "mainnet":
+            provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-mainnet.public.lavanet.xyz" });
+            privateKey0 = account4MainnetPrivateKey;
+            account0Address = account4MainnetAddress;
+            account0 = new Account(provider, account0Address, privateKey0, "1");
+            break;
+        default:
+            throw new Error("wrong network name.")
+            break;
+    }
     console.log('existing account connected.\n');
 
 
@@ -51,7 +72,7 @@ async function main() {
     console.log("bits_len=", bits_len);
     const fil = await myTestContract.get_file();
     console.log("file=", fil);
-    let hexArray=fil.numbers.map((numb:bigint)=>encode.addHexPrefix(numb.toString(16).padStart(64, '0')));
+    let hexArray = fil.numbers.map((numb: bigint) => encode.addHexPrefix(numb.toString(16).padStart(64, '0')));
     let jsonF: BinaryJson = {
         size_bytes: fil.size_bytes,
         bits_len: fil.bits_len,

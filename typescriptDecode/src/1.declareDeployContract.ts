@@ -6,7 +6,7 @@ import { Provider, SequencerProvider, RpcProvider, Account, Contract, json, num,
 import { formatBalance } from "./formatBalance";
 import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "./private/A1priv";
 import { account4MainnetAddress, account4MainnetPrivateKey } from "./private/mainPriv";
-import {resetDevnetNow} from "./resetDevnetFunc";
+import { resetDevnetNow } from "./resetDevnetFunc";
 
 
 
@@ -30,7 +30,7 @@ interface BinaryJson {
 }
 
 async function main() {
-    const network:string = "devnet" // or "testnet" or "mainnet".
+    const network: string = "devnet" // or "testnet" or "mainnet".
     let provider: Provider | SequencerProvider | RpcProvider;
     let privateKey0: BigNumberish;
     let account0Address: BigNumberish;
@@ -47,19 +47,19 @@ async function main() {
             provider = new RpcProvider({ nodeUrl: junoNMtestnet });
             privateKey0 = account2TestnetPrivateKey;
             account0Address = account2TestnetAddress;
-            account0 = new Account(provider, account0Address, privateKey0,"1");
+            account0 = new Account(provider, account0Address, privateKey0, "1");
             break;
-            case "mainnet":
-                provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-mainnet.public.lavanet.xyz" });
-                privateKey0 = account4MainnetPrivateKey;
-                account0Address = account4MainnetAddress;
-                account0 = new Account(provider, account0Address, privateKey0,"1");
-                break;
-            default:
+        case "mainnet":
+            provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-mainnet.public.lavanet.xyz" });
+            privateKey0 = account4MainnetPrivateKey;
+            account0Address = account4MainnetAddress;
+            account0 = new Account(provider, account0Address, privateKey0, "1");
+            break;
+        default:
             throw new Error("wrong network name.")
             break;
     }
-    
+
     console.log('existing account connected.\n');
 
     // Declare & deploy Test contract in devnet
@@ -83,7 +83,7 @@ async function main() {
     const { suggestedMaxFee: estimatedFeeDec } = await account0.estimateDeclareFee({ contract: compiledSierra, casm: compiledCasm });
     console.log("declare est cost =", formatBalance(estimatedFeeDec * 1500n, 18), "US$");
     const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
-    console.log("Class_hash =",declareResponse.class_hash);
+    console.log("Class_hash =", declareResponse.class_hash);
     const txR = await provider.waitForTransaction(declareResponse.transaction_hash);
     if (!("actual_fee" in txR)) { throw new Error("Failure of declare.") };
     console.log("    declare cost =", formatBalance(BigInt(txR.actual_fee) * 1500n, 18), "US$");
