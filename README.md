@@ -1,6 +1,16 @@
 # file2felts
-Converts in both sides a binary file with an array of Cairo u252.  
-Useful to store small files in Starknet (small NFT image for example).
+**Tool to convert in both sides a binary file with an array of Cairo u252 (for Starknet).**  
+ 
+To store large data outside of the block-chain is cost effective (using just a link stored in Starknet), but is also prone to :  
+- deletion of the storage area.
+- change of the content of the data.
+
+To store small files in Starknet (small NFT image for example) is very expensive, but it ensures that :
+- these data will exists as long as the block-chain.
+- if deployed in a non upgradable contract, it can't be modified by anybody.
+
+This small tool converts a binary file to a format that can be deployed in the block-chain.
+It can also do the reverse operation.
 
 ## Install & run
 
@@ -41,6 +51,6 @@ Once the json of the data recovered , you can decode it to recover the original 
 file2felts decode --source ./king.json --dest ./decodedKing.gif
 ```
 
-## use in Starknet block-chain
+## Use in Starknet block-chain
 
-Have a look in this directory [typescriptDecode](typescriptDecode/README.md)
+Have a look in this directory [typescriptDecode](typescriptDecode/)
