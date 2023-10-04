@@ -19,5 +19,7 @@ You ask to the contract to send you the content of the binary file, the result i
 ```bash
 npx ts-node ./src/3.decodeJson.ts
 ```
-A file `kingRecovered.gif` is created, identical to the original `king.gif`.
+A file `kingRecovered.gif` is created, identical to the original `king.gif`.  
+Then you can use this result in your DAPP.  
+Typical use case is a non upgradable NFT smart-contract that includes a tiny picture of the NFT. It's an ultra strong proof that this picture belong to this NFT.
 

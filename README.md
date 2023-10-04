@@ -9,7 +9,7 @@ To store small files in Starknet (small NFT image for example) is very expensive
 - these data will exists as long as the block-chain.
 - if deployed in a non upgradable contract, it can't be modified by anybody.
 
-This small tool converts a binary file to a format that can be deployed in the block-chain.
+This small tool converts a binary file to a format that can be deployed in the block-chain.  
 It can also do the reverse operation.
 
 ## Install & run
@@ -40,7 +40,7 @@ file2felts encode --source ./king.gif --dest ./king.json
 > By default, this value is set to 251 (a felt is coded on 251 bits).  
 > But if you want to encode for example on u128, you have to add the option `--bits-len 128`. 
 
-Then you can store the content of the json file in a Starknet smart-contract. See an example [here](typescriptDecode/src/1.declareDeployContract.ts).
+Then you can store the content of the json file in a Starknet non upgradable smart-contract. See an example [here](typescriptDecode/src/1.declareDeployContract.ts).
 
 ## Decode
 
