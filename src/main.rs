@@ -38,20 +38,20 @@ struct Arguments {
     bits_len: u16,
 }
 
-struct Arg {
-    action: String,
-    source: String,
-    dest: String,
-    bits_len: u16,
-}
+// struct Arg {
+//     action: String,
+//     source: String,
+//     dest: String,
+//     bits_len: u16,
+// }
 fn main() {
-    // let args = Arguments::parse();
-    let args = Arg {
-        action: String::from("encode"),
-        source: String::from("./king.gif"),
-        dest: String::from("./king.json"),
-        bits_len: constants::DEFAULT_OUTPUT_SIZE,
-    };
+    let args = Arguments::parse();
+    // let args = Arg {
+    //     action: String::from("encode"),
+    //     source: String::from("./king.gif"),
+    //     dest: String::from("./king.json"),
+    //     bits_len: constants::DEFAULT_OUTPUT_SIZE,
+    // };
 
     match args.action.as_ref() {
         "encode" => {

@@ -1,6 +1,6 @@
 # file2felts
 Converts in both sides a binary file with an array of Cairo u252.  
-Useful to store small files in Starknet (NFT image for example).
+Useful to store small files in Starknet (small NFT image for example).
 
 ## Install & run
 
@@ -15,12 +15,12 @@ or copy the linux 64 executable on your disk, then :
 
 ## Encode
 
-As storage space is very expensive in a blockchain ; you have to use only very small binaries. 
-For technical reason, Starknet can't store more than 253 felts (8kb).
-3 examples are provided : 3 jpg ultra-compressed images 64x64 pixels. These files are smaller than 2kB.
+As storage space is VERY expensive in a blockchain, you have to use only very small binaries, that contents very valuable data. 
+For technical reason, Starknet can't store more than 253 felts (8kb).  
+3 examples are provided : 3 jpg ultra-compressed images 64x64 pixels. These files are about one kb.
 
-In October 2023, you can consider that to store 1kb in the Starnet mainnet block-chain will cost about xxETH (xx US$).
-In testnet, it cost 0,000_048 gETH.
+In October 2023, the declaration of the contract in the Starnet mainnet block-chain costs about 85 US$, and the deployment of one kb cost about 1100 US$ ! So, only for high value data.  
+In testnet, it cost 0,00557 gETH to declare, and 0.0728 gETH to deploy a 1kb file. Deploy for 2 kb is x1.8 more expensive ; for 6 kb is x5.0 more.
 
 ```bash
 file2felts encode --source ./king.gif --dest ./king.json
