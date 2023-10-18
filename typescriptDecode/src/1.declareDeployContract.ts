@@ -1,6 +1,7 @@
 // declare & deploy a contract.
-// use of OZ deployer
-// launch with npx ts-node 
+// 
+// launch with npx ts-node src/1.declareDeployContract.ts
+// use Starknet-js v5.21.0
 
 import { Provider, SequencerProvider, RpcProvider, Account, Contract, json, num, uint256, CallData, BigNumberish, hash, constants } from "starknet";
 import { formatBalance } from "./formatBalance";
@@ -13,7 +14,7 @@ import { resetDevnetNow } from "./resetDevnetFunc";
 import fs from "fs";
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
+// 🚨🚨🚨   Launch starknet-devnet-rs with '--seed 0' before using this script.
 //          👆👆👆
 
 interface BinaryFile {
@@ -30,17 +31,21 @@ interface BinaryJson {
 }
 
 async function main() {
-    const network: string = "devnet" // or "testnet" or "mainnet".
+    const network: string = "devnet" // 🚨 "devnet" or "testnet" or "mainnet".
     let provider: Provider | SequencerProvider | RpcProvider;
     let privateKey0: BigNumberish;
     let account0Address: BigNumberish;
     let account0: Account;
     switch (network) {
         case "devnet":
-            resetDevnetNow();
+            //resetDevnetNow(); // only for Starknet-devnet
             provider = new SequencerProvider({ baseUrl: "http://127.0.0.1:5050" });
-            privateKey0 = "0xe3e70682c2094cac629f6fbed82c07cd";
-            account0Address = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
+            // // for Starknet-devnet
+            // privateKey0 = "0xe3e70682c2094cac629f6fbed82c07cd";
+            // account0Address = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
+            // for starknet-devnet-rs
+            privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
+            account0Address = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
             account0 = new Account(provider, account0Address, privateKey0);
             break;
         case "testnet":
@@ -76,7 +81,7 @@ async function main() {
     const constructor = myCallData.compile("constructor", { file: myEncodedFile });
     const ch = hash.computeSierraContractClassHash(compiledSierra);
     console.log("Class hash =", ch);
-    // class hash=0x2df08c2287221d6c50266c62cbfe455b6e040488c8bae45601f11f4e16d057
+    // class hash=0x66f35190131b92c55289a8fe8abdb7f991eb0000019151a0084f5fe3fe38d01
 
     // to uncomment if devnet :
 
@@ -102,6 +107,7 @@ async function main() {
     const myTestContract = new Contract(compiledSierra.abi, deployResponse.contract_address[0], provider);
     console.log('✅ Test Contract connected at =', myTestContract.address);
     // testnet : 0x7dac368af2e1f96f0d72241ded49b5b433103bfdd65fc3663f01376f4ee2615
+    // testnet : 0x154a66175310f89c9908835fb85d012b5c42a74c9404d29b4152eec552ca8c
 }
 main()
     .then(() => process.exit(0))

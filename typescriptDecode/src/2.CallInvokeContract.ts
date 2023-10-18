@@ -1,6 +1,6 @@
 // interact with a contract that is already deployed on devnet.
-// launch with npx ts-node src/scripts/11.CallInvokeContract.ts
-// Coded with Starknet.js v5.16.0
+// launch with npx ts-node src/2.CallInvokeContract.ts
+// Coded with Starknet.js v5.21.0
 
 import { Provider, RpcProvider, SequencerProvider, Contract, Account, json, BigNumberish, num, encode, constants } from "starknet";
 import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "./private/A1priv";
@@ -10,7 +10,7 @@ import fs from "fs";
 
 
 //          👇👇👇
-// 🚨🚨🚨   Launch 'starknet-devnet --seed 0' before using this script.
+// 🚨🚨🚨   Launch starknet-devnet-rs with '--seed 0' before using this script.
 //          👆👆👆
 
 interface BinaryFile {
@@ -27,16 +27,20 @@ interface BinaryJson {
 }
 
 async function main() {
-    const network: string = "devnet" // or "testnet" or "mainnet".
+    const network: string = "testnet" // 🚨 "devnet" or "testnet" or "mainnet".
     let provider: Provider | SequencerProvider | RpcProvider;
     let privateKey0: BigNumberish;
     let account0Address: BigNumberish;
     let account0: Account;
     switch (network) {
-        case "devnet":
+        case "devnet":   
             provider = new SequencerProvider({ baseUrl: "http://127.0.0.1:5050" });
-            privateKey0 = "0xe3e70682c2094cac629f6fbed82c07cd";
-            account0Address = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
+            // for Starknet-devnet
+            // privateKey0 = "0xe3e70682c2094cac629f6fbed82c07cd";
+            // account0Address = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
+            // for starknet-devnet-rs
+            privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
+            account0Address = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
             account0 = new Account(provider, account0Address, privateKey0);
             break;
         case "testnet":
@@ -59,7 +63,8 @@ async function main() {
 
 
     // Connect the deployed Test instance in devnet
-    const testAddress = "0x7dac368af2e1f96f0d72241ded49b5b433103bfdd65fc3663f01376f4ee2615"; // modify in accordance with result of script 1
+    const testAddress = "0x154a66175310f89c9908835fb85d012b5c42a74c9404d29b4152eec552ca8c"; // modify in accordance with result of script 1
+    // was 0x7dac368af2e1f96f0d72241ded49b5b433103bfdd65fc3663f01376f4ee2615
     const compiledTest = json.parse(fs.readFileSync("./cairo/storage_felts.sierra.json").toString("ascii"));
     const myTestContract = new Contract(compiledTest.abi, testAddress, provider);
     console.log('Test Contract connected at =', myTestContract.address, "\n", myTestContract.functions);

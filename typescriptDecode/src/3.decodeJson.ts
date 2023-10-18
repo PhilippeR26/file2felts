@@ -1,3 +1,6 @@
+// Decode the json file recovered from the smart-contract.
+// launch with npx ts-node src/3.decodeJson.ts
+
 import { Provider, SequencerProvider, RpcProvider, Account, Contract, ec, json, RawArgs, stark, num, uint256, Calldata, CallData, BigNumberish, hash, constants, encode } from "starknet";
 import { formatBalance } from "./formatBalance";
 import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "./private/A1priv";

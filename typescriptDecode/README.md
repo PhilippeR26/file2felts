@@ -9,8 +9,8 @@ npx ts-node ./src/1.declareDeployContract.ts
 ```
 After creation of the `king.json` file with the file2felts tool, you send the data in a new smart-contract.
 
-> This contract is already declared in Tesnet with this [Class_hash](https://goerli.voyager.online/class/0x002df08c2287221d6c50266c62cbfe455b6e040488c8bae45601f11f4e16d057)
-> And has been deployed first [here](https://goerli.voyager.online/contract/0x07DaC368af2E1F96F0d72241dEd49B5B433103bfdD65FC3663f01376F4EE2615)
+> This contract is already declared in Tesnet with this [Class_hash](https://goerli.voyager.online/class/0x66f35190131b92c55289a8fe8abdb7f991eb0000019151a0084f5fe3fe38d01)
+> And has been deployed first [here](https://goerli.voyager.online/contract/0x154a66175310f89c9908835fb85d012b5c42a74c9404d29b4152eec552ca8c)
 
 > You can deploy your own contract (including your own binary file), using this class.
 ## use of the contract with Starknet.js :
