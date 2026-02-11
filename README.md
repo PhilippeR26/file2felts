@@ -29,7 +29,7 @@ As storage space is VERY expensive in a blockchain, you have to use only very sm
 For technical reason, Starknet can't store more than 253 felts (8kb).  
 3 examples are provided : 3 jpg ultra-compressed images 64x64 pixels. These files are about one kb.
 
-In October 2023, the declaration of the contract in the Starnet mainnet block-chain costs about 85 US$, and the deployment of one kb cost about 1100 US$ ! So, only for high value data.  
+In October 2023, the declaration of the contract in the Starknet mainnet block-chain costs about 85 US$, and the deployment of one kb cost about 1100 US$ ! So, only for high value data.  
 In testnet, it cost 0,00557 gETH to declare, and 0.079 gETH to deploy a 1kb file. Deploy for 2 kb is x1.8 more expensive ; for 6 kb is x5.0 more.
 
 ```bash

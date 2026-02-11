@@ -1,0 +1,94 @@
+[
+    {
+      "interface_name": "storage_felts::storage_felts::IstorageFelts",
+      "name": "TestFelt",
+      "type": "impl"
+    },
+    {
+      "members": [
+        {
+          "name": "snapshot",
+          "type": "@core::array::Array::<core::felt252>"
+        }
+      ],
+      "name": "core::array::Span::<core::felt252>",
+      "type": "struct"
+    },
+    {
+      "members": [
+        {
+          "name": "size_bytes",
+          "type": "core::integer::u64"
+        },
+        {
+          "name": "bits_len",
+          "type": "core::integer::u16"
+        },
+        {
+          "name": "len",
+          "type": "core::integer::u32"
+        },
+        {
+          "name": "numbers",
+          "type": "core::array::Span::<core::felt252>"
+        }
+      ],
+      "name": "storage_felts::storage_felts::BinaryFile",
+      "type": "struct"
+    },
+    {
+      "items": [
+        {
+          "inputs": [],
+          "name": "get_size_bytes",
+          "outputs": [
+            {
+              "type": "core::integer::u64"
+            }
+          ],
+          "state_mutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "get_bits_len_bytes",
+          "outputs": [
+            {
+              "type": "core::integer::u16"
+            }
+          ],
+          "state_mutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "get_file",
+          "outputs": [
+            {
+              "type": "storage_felts::storage_felts::BinaryFile"
+            }
+          ],
+          "state_mutability": "view",
+          "type": "function"
+        }
+      ],
+      "name": "storage_felts::storage_felts::IstorageFelts",
+      "type": "interface"
+    },
+    {
+      "inputs": [
+        {
+          "name": "file",
+          "type": "storage_felts::storage_felts::BinaryFile"
+        }
+      ],
+      "name": "constructor",
+      "type": "constructor"
+    },
+    {
+      "kind": "enum",
+      "name": "storage_felts::storage_felts::StorageFelts::Event",
+      "type": "event",
+      "variants": []
+    }
+  ]

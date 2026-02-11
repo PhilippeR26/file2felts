@@ -80,7 +80,7 @@ fn main() {
             );
         }
         "decode" => {
-            println!("In progres...");
+            println!("In progress...");
             let now = Instant::now();
             let path = args.source;
 

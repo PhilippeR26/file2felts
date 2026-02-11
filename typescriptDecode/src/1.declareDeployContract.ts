@@ -39,7 +39,7 @@ async function main() {
     switch (network) {
         case "devnet":
             //resetDevnetNow(); // only for Starknet-devnet
-            provider = new SequencerProvider({ baseUrl: "http://127.0.0.1:5050" });
+            provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
             // // for Starknet-devnet
             // privateKey0 = "0xe3e70682c2094cac629f6fbed82c07cd";
             // account0Address = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
@@ -49,16 +49,17 @@ async function main() {
             account0 = new Account(provider, account0Address, privateKey0);
             break;
         case "testnet":
-            provider = new RpcProvider({ nodeUrl: junoNMtestnet });
+            // provider = new RpcProvider({ nodeUrl: junoNMtestnet });
+            provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.4" }); // local pathfinder testnet node
             privateKey0 = account2TestnetPrivateKey;
             account0Address = account2TestnetAddress;
-            account0 = new Account(provider, account0Address, privateKey0, "1");
+            account0 = new Account(provider, account0Address, privateKey0);
             break;
         case "mainnet":
             provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-mainnet.public.lavanet.xyz" });
             privateKey0 = account4MainnetPrivateKey;
             account0Address = account4MainnetAddress;
-            account0 = new Account(provider, account0Address, privateKey0, "1");
+            account0 = new Account(provider, account0Address, privateKey0);
             break;
         default:
             throw new Error("wrong network name.")
