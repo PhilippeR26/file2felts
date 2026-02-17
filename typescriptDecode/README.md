@@ -2,29 +2,29 @@
 
 Launch starknet-devnet
 
-## deployement of the contract :
+## deployment of the contract :
+After creation of the `king.json` file with the file2felts tool (or with the [script 0](./src/0.encodeKing.ts)), you have to send the data in a new smart-contract.
 
 ```bash
 npx ts-node ./src/1.declareDeployContract.ts
 ```
-After creation of the `king.json` file with the file2felts tool, you send the data in a new smart-contract.
 
-> This contract is already declared in Tesnet with this [Class_hash](https://goerli.voyager.online/class/0x66f35190131b92c55289a8fe8abdb7f991eb0000019151a0084f5fe3fe38d01)
-> And has been deployed first [here](https://goerli.voyager.online/contract/0x154a66175310f89c9908835fb85d012b5c42a74c9404d29b4152eec552ca8c)
+> This contract is already declared in Testnet with this [Class_hash](https://sepolia.voyager.online/class/0x04e066a98d1537753d8d69fa359398cdce7ac488ce1251dc3ffc48b1f6ad7e2b)  
+> and has been deployed first [here](https://sepolia.voyager.online/contract/0x05eef609d9bdec7c148038b1a9f7e3bebc73061092ca0e8d20f553e62a4c9033)
 
-> You can deploy your own contract (including your own binary file), using this class.
+> You can deploy your own contract (that includes your own binary file), using this class.
 ## use of the contract with Starknet.js :
 
 ```bash
 npx ts-node ./src/2.CallInvokeContract.ts
 ```
-You ask to the contract to send you the content of the binary file, the result is `kingRead.json`.
+You ask to the contract to send you the content of the binary file (in felt252 format), the result is `kingRead.json`.
+
 ## Recover the binary file in your computer :
 
 ```bash
 npx ts-node ./src/3.decodeJson.ts
 ```
-A file `kingRecovered.gif` is created, identical to the original `king.gif`.  
+From the json file (felt252 format), a binary file `kingRecovered.gif` is created, identical to the original `king.gif`.  
 Then you can use this result in your DAPP.  
-Typical use case is a non upgradable NFT smart-contract, that includes a tiny picture of the NFT. It's an ultra strong proof that this picture belong to this NFT.
 

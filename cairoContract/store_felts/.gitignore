@@ -1,0 +1,10 @@
+target/CACHEDIR.TAG
+target/dev/.fingerprint/
+target/dev/incremental/
+target/dev/*test*
+target/dev/*artifacts*
+.snfoundry_cache/
+snfoundry_trace/
+coverage/
+profile/
+Scarb.lock

@@ -1,114 +1,131 @@
 // declare & deploy a contract.
 // 
-// launch with npx ts-node src/1.declareDeployContract.ts
-// use Starknet-js v5.21.0
+// launch with npx ts-node ./src/1.declareDeployContract.ts
+// Coded with Starknet.js v9.3.0
 
-import { Provider, SequencerProvider, RpcProvider, Account, Contract, json, num, uint256, CallData, BigNumberish, hash, constants } from "starknet";
+import { Provider, RpcProvider, Account, Contract, json, num, uint256, CallData, BigNumberish, hash, constants, CairoBytes31 } from "starknet";
 import { formatBalance } from "./formatBalance";
-import { account2TestnetAddress, account2TestnetPrivateKey, junoNMtestnet } from "./private/A1priv";
-import { account4MainnetAddress, account4MainnetPrivateKey } from "./private/mainPriv";
-import { resetDevnetNow } from "./resetDevnetFunc";
+import { account3ArgentXSepoliaAddress, account3ArgentXSepoliaPrivateKey, alchemyKey } from "./private/A1priv";
+import { account3BraavosMainnetAddress, account3BraavosMainnetPrivateKey } from "./private/mainPriv";
 
 
 
 import fs from "fs";
+import { DevnetProvider } from "starknet-devnet";
+import type { BinaryJson } from "./types";
+import assert from "./utils";
 
 //          👇👇👇
-// 🚨🚨🚨   Launch starknet-devnet-rs with '--seed 0' before using this script.
+// 🚨🚨🚨   Before using this script:
+// - Create a json file. ex: `file2felts encode --source ./king.gif --dest ./king.json`, or script 0
+// - Launch starknet-devnet with '--seed 0' before using this script.
 //          👆👆👆
 
 interface BinaryFile {
     size_bytes: BigNumberish,
-    bits_len: BigNumberish,
-    len: BigNumberish,
     numbers: BigNumberish[],
-}
-
-interface BinaryJson {
-    size_bytes: BigNumberish,
-    bits_len: BigNumberish,
-    numbers: string[],
 }
 
 async function main() {
     const network: string = "devnet" // 🚨 "devnet" or "testnet" or "mainnet".
-    let provider: Provider | SequencerProvider | RpcProvider;
-    let privateKey0: BigNumberish;
-    let account0Address: BigNumberish;
+    let myProvider: RpcProvider;
     let account0: Account;
     switch (network) {
         case "devnet":
-            //resetDevnetNow(); // only for Starknet-devnet
-            provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
-            // // for Starknet-devnet
-            // privateKey0 = "0xe3e70682c2094cac629f6fbed82c07cd";
-            // account0Address = "0x7e00d496e324876bbc8531f2d9a82bf154d1a04a50218ee74cdd372f75a551a";
-            // for starknet-devnet-rs
-            privateKey0 = "0x71d7bb07b9a64f6f78ac4c816aff4da9";
-            account0Address = "0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691";
-            account0 = new Account(provider, account0Address, privateKey0);
-            break;
+            {
+                myProvider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050/rpc" });
+                const l2DevnetProvider = new DevnetProvider({ timeout: 40_000 });
+                await l2DevnetProvider.restart();
+                if (!(await l2DevnetProvider.isAlive())) {
+                    console.log("No l2 devnet.");
+                    process.exit();
+                }
+                const accData = await l2DevnetProvider.getPredeployedAccounts();
+                const account0Address = accData[0].address;
+                const privateKey0 = accData[0].private_key;
+                account0 = new Account({
+                    provider: myProvider,
+                    address: account0Address,
+                    signer: privateKey0
+                });
+                break;
+            }
         case "testnet":
-            // provider = new RpcProvider({ nodeUrl: junoNMtestnet });
-            provider = new RpcProvider({ nodeUrl: "http://192.168.1.99:9545/rpc/v0.4" }); // local pathfinder testnet node
-            privateKey0 = account2TestnetPrivateKey;
-            account0Address = account2TestnetAddress;
-            account0 = new Account(provider, account0Address, privateKey0);
-            break;
+            {
+                myProvider = new RpcProvider({ nodeUrl: "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_10/" + alchemyKey }); // local pathfinder testnet node
+                const account0Address = account3ArgentXSepoliaAddress;
+                const privateKey0 = account3ArgentXSepoliaPrivateKey;
+                account0 = new Account({
+                    provider: myProvider,
+                    address: account0Address,
+                    signer: privateKey0
+                });
+                break;
+            }
         case "mainnet":
-            provider = new RpcProvider({ nodeUrl: "https://json-rpc.starknet-mainnet.public.lavanet.xyz" });
-            privateKey0 = account4MainnetPrivateKey;
-            account0Address = account4MainnetAddress;
-            account0 = new Account(provider, account0Address, privateKey0);
-            break;
+            {
+                myProvider = new RpcProvider({ nodeUrl: "https://starknet-mainnet.g.alchemy.com/starknet/version/rpc/v0_10/" + alchemyKey });
+                const account0Address = account3BraavosMainnetPrivateKey;
+                const privateKey0 = account3BraavosMainnetAddress;
+                account0 = new Account({
+                    provider: myProvider,
+                    address: account0Address,
+                    signer: privateKey0
+                });
+                break;
+            }
         default:
             throw new Error("wrong network name.")
             break;
     }
-
     console.log('existing account connected.\n');
+    console.log(
+        "chain Id =", new CairoBytes31(await myProvider.getChainId()).decodeUtf8(),
+        ", rpc", await myProvider.getSpecVersion(),
+        ", SN version =", (await myProvider.getBlock()).starknet_version);
 
     // Declare & deploy Test contract in devnet
-    const compiledSierra = json.parse(fs.readFileSync("./cairo/storage_felts.sierra.json").toString("ascii"));
-    const compiledCasm = json.parse(fs.readFileSync("./cairo/storage_felts.casm.json").toString("ascii"));
-    const feltField: BinaryJson = json.parse(fs.readFileSync("../king.json").toString("ascii"));
+    const compiledSierra = json.parse(fs.readFileSync("../cairoContract/store_felts/target/dev/store_felts_StorageFelts.contract_class.json").toString("ascii"));
+    const compiledCasm = json.parse(fs.readFileSync("../cairoContract/store_felts/target/dev/store_felts_StorageFelts.compiled_contract_class.json").toString("ascii"));
+    const feltField: BinaryJson = json.parse(fs.readFileSync("./king.json").toString("ascii"));
+    assert(feltField.bits_len === 251, "This contract uses only felt252");
+    console.log("input is",feltField.size_bytes,"bytes.");
     let myEncodedFile: BinaryFile = {
         size_bytes: feltField.size_bytes,
-        bits_len: feltField.bits_len,
-        len: feltField.numbers.length,
         numbers: feltField.numbers
     }
     const myCallData = new CallData(compiledSierra.abi);
     const constructor = myCallData.compile("constructor", { file: myEncodedFile });
     const ch = hash.computeSierraContractClassHash(compiledSierra);
     console.log("Class hash =", ch);
-    // class hash=0x66f35190131b92c55289a8fe8abdb7f991eb0000019151a0084f5fe3fe38d01
+    // class hash=0x4e066a98d1537753d8d69fa359398cdce7ac488ce1251dc3ffc48b1f6ad7e2b
 
-    // to uncomment if devnet :
-
-    const { suggestedMaxFee: estimatedFeeDec } = await account0.estimateDeclareFee({ contract: compiledSierra, casm: compiledCasm });
-    console.log("declare est cost =", formatBalance(estimatedFeeDec * 1500n, 18), "US$");
+    const { overall_fee: estimatedFeeDec } = await account0.estimateDeclareFee({ contract: compiledSierra, casm: compiledCasm });
+    console.log("declare est cost =", formatBalance(estimatedFeeDec * 1000n / 48n, 18), "US$");
     const declareResponse = await account0.declare({ contract: compiledSierra, casm: compiledCasm });
     console.log("Class_hash =", declareResponse.class_hash);
-    const txR = await provider.waitForTransaction(declareResponse.transaction_hash);
-    if (!("actual_fee" in txR)) { throw new Error("Failure of declare.") };
-    console.log("    declare cost =", formatBalance(BigInt(txR.actual_fee) * 1500n, 18), "US$");
+    const txR = await myProvider.waitForTransaction(declareResponse.transaction_hash);
+    if (!txR.isSuccess()) { throw new Error("Failure of declare.") };
+    console.log("    declare cost =", formatBalance(BigInt(txR.actual_fee.amount) * 1000n / 48n, 18), "US$");
 
     //console.log("constructor =", constructor);
-    const { suggestedMaxFee: estimatedFeeDep } = await account0.estimateDeployFee({ classHash: ch, constructorCalldata: constructor });
-    console.log(" deploy est cost =", formatBalance(estimatedFeeDep * 1500n, 18), "US$");
+    const { overall_fee: estimatedFeeDep } = await account0.estimateDeployFee({ classHash: ch, constructorCalldata: constructor });
+    console.log(" deploy est cost =", formatBalance(estimatedFeeDep * 1000n / 48n, 18), "US$");
     const deployResponse = await account0.deploy({ classHash: ch, constructorCalldata: constructor });
-    const txR2 = await provider.waitForTransaction(deployResponse.transaction_hash);
-    if (!("actual_fee" in txR2)) { throw new Error("Failure of deploy.") };
-    console.log("     deploy cost =", formatBalance(BigInt(txR2.actual_fee) * 1500n, 18), "US$");
-
+    const txR2 = await myProvider.waitForTransaction(deployResponse.transaction_hash);
+    if (!txR2.isSuccess()) { throw new Error("Failure of deploy.") };
+    console.log("     deploy cost =", formatBalance(BigInt(txR2.actual_fee.amount) * 1000n / 48n, 18), "US$");
 
 
     // Connect the new contract instance :
-    const myTestContract = new Contract(compiledSierra.abi, deployResponse.contract_address[0], provider);
+    const myTestContract = new Contract({
+        abi: compiledSierra.abi,
+        address: deployResponse.contract_address[0],
+        providerOrAccount: myProvider,
+    });
+    const aaa=await myProvider.getClassAt(myTestContract.address);
     console.log('✅ Test Contract connected at =', myTestContract.address);
-    // testnet : 0x7dac368af2e1f96f0d72241ded49b5b433103bfdd65fc3663f01376f4ee2615
-    // testnet : 0x154a66175310f89c9908835fb85d012b5c42a74c9404d29b4152eec552ca8c
+    // testnet : 0x5eef609d9bdec7c148038b1a9f7e3bebc73061092ca0e8d20f553e62a4c9033
 }
 main()
     .then(() => process.exit(0))

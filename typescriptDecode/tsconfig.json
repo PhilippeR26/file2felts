@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target":"ES2022",
     "lib": [
-      "es2017",
+      "es2022",
       "es7",
       "es6",
       "dom"
@@ -11,12 +11,13 @@
     "rootDir": "./src",
     "incremental": true,
     "module": "commonjs",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "strict": true,
     "esModuleInterop": true,
     "sourceMap": true,
     "isolatedModules": true,
+    "types": ["node"],
   },
   "include": [
     "src/**/*"

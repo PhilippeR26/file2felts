@@ -8,14 +8,20 @@
             "type": "node",
             "request": "launch",
             "name": "typescript1",
-            "program": "${workspaceFolder}/src/3.decodeJson.ts",
+            "program": "${file}",
             "preLaunchTask": "npm: build",
             "sourceMaps": true,
             "smartStep": true,
             "internalConsoleOptions": "openOnSessionStart",
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"
-            ]
+            ],
+            "runtimeArgs": [
+                "--preserve-symlinks"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
         }
     ]
 }
